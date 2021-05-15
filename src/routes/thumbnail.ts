@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { unlinkSync } from 'fs'
-import sharp, * as sharp from 'sharp'
+import { unlinkSync, existsSync, mkdirSync } from 'fs'
+import * as sharp from 'sharp'
 import { basename, join } from 'path'
 
 import {
@@ -24,6 +24,17 @@ thumbnailRouter.get('/:id', async (req, res) => {
       'thumbnail',
       basename(caminhoArquivo)
     )
+    if (!existsSync(join(
+      __dirname,
+      '..',
+      '..',
+      'thumbnail'))) {
+      mkdirSync(join(
+        __dirname,
+        '..',
+        '..',
+        'thumbnail'))
+    }
     sharp(caminhoArquivo)
       .resize(100, 100, {
         fit: sharp.fit.contain
